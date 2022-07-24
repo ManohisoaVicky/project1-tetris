@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+:root {
+    --main-bg: #000000;
+    --sub-cl: greenyellow;
+    --sub-cl-two: #FFFFFF;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+    background-color: var(--main-bg);
+}
+
+main > div {
+    height: 73%;
+    width: 20%;
+    margin: 0px 30px;
+}
+
+#middle-div, 
+#right-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#left-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#game-canvas, 
+#next-tetromino {
+    background-color: var(--main-bg);
+    border: 2px solid var(--sub-cl-two);
+}
+
+h1 {
+    color: var(--sub-cl);
+    font-size: 50px;
+    -webkit-text-stroke: 2px var(--sub-cl-two);
+}
+
+#board > div > p {
+    color: var(--sub-cl-two);
+}
+
+#right-div > p {
+    color: var(--sub-cl-two);
+    opacity: 0.2;
+}
+
+#start-button {
+    width: 150px;
+    height: 60px;
+    background-color: var(--sub-cl);
+    border: 2px solid var(--sub-cl-two);
+}
+
+#start-button:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px grey;
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/main.css">
+    <script defer src="scripts/app.js"></script>
+    <title>Tetris</title>
+</head>
+<body>
+    <main>
+
+        <div id="left-div">
+            <h1>Tetris</h1>
+            <button id="start-button">Start</button>
+        </div>
+
+        <div id="middle-div">
+            <canvas id="game-canvas" width="350" height="700"></canvas>
+        </div>
+
+        <div id="right-div">
+            <canvas id="next-tetromino" width="200" height="200"></canvas>
+            <div id="board">
+                <div id="scores">
+                    <p>Score: <span>0</span></p>
+                </div>
+                <div id="lines">
+                    <p>Lines: <span>0</span></p>
+                </div>
+                <div id="level">
+                    <p>Level: <span>0</span></p>
+                </div>
+            </div>
+            <p>Move right: Right Arrow <br>
+                Move Left: Left Arrow <br>
+                Rotate: Up Arrow <br>
+                Fast Drop: Down Arrow</p>
+        </div>
+
+    </main>
+</body>
+</html>
