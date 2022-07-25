@@ -15,3 +15,5 @@ You bring down blocks from the top of the game board. You can move the blocks ri
 My goal is to recreate a working Tetris game. 
 
 To start, I pondered on whether it would have been best to use html divs as grids or html canvas for the game board. After much research, I decided to use html canvas. One of the reasons why I chose html canvas has to do with the rotations of the tetrominos. I figured using html canvas would more practical. 
+
+I wrote the basic html and css that I thought would be necessary. Once done, I started building the grid for the game using html's canvas and javascript. Building the grid was straightforward. The challenge came after that. Drawing the different tetromino shapes was tricky. 
