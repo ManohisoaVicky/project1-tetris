@@ -17,6 +17,11 @@ function init() {
   let startingX = 3;
   let startingY = 0;
 
+  // booleans
+  let tetroFalling = false;
+  let locked = false;
+  let fullLine = false;
+
   let shapes = [
     [
       [1, 1, 1, 1],
@@ -55,28 +60,20 @@ function init() {
     ],
   ];
 
-  // drawing a cell
-  function drawCell(x, y) {
-    ctx.strokeStyle = "white";
-    ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-  }
-
   // creating the grid
   function createGrid() {
     for (let i = 0; i < numOfRows; i++) {
       grid[i] = [];
       for (let j = 0; j < numOfColumns; j++) {
         grid[grid.length - 1].push(0);
-        drawCell(j, i);
       }
     }
-    console.log(grid);
   }
   createGrid();
 
   // randomly choosing a tetromino shape
   function randomShape() {
-    let random = Math.floor(Math.random() * 6);
+    let random = Math.floor(Math.random() * 7);
     shape = shapes[random];
     return shape;
   }
@@ -108,39 +105,18 @@ function init() {
     });
   }
 
-  // removing the tetromino
-  function removeTetromino() {
-    shape.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value === 1) {
-          if (shape === shapes[3]) {
-            startingX = 4;
-          }
-          ctx.strokeStyle = "white";
-          ctx.strokeRect(
-            (startingX + x) * cellSize,
-            (startingY + y) * cellSize,
-            cellSize,
-            cellSize
-          );
-          ctx.fillStyle = "black";
-          ctx.fillRect(
-            (startingX + x) * cellSize,
-            (startingY + y) * cellSize,
-            cellSize,
-            cellSize
-          );
-        }
-      });
-    });
+  function draw() {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    drawTetrimino();
+    requestAnimationFrame(draw);
   }
+  draw();
 
   // making the tetromino fall
   function fall() {
     let timer = setInterval(() => {
-      removeTetromino();
+      draw();
       startingY += 1;
-      drawTetrimino();
     }, fallTime);
   }
 
@@ -148,15 +124,17 @@ function init() {
   function startGame() {
     // choosing a random tetromino shape
     randomShape();
-    //draw tetromino
 
-    drawTetrimino();
+    // draw tetromino
+    draw();
 
+    // fall motion for the tetromino
     fall();
   }
 
-  //event listener for the start button
+  //event listeners
   startBtn.addEventListener("click", startGame);
+  document.addEventListener("keydown", tetMoves);
 }
 
 window.addEventListener("DOMContentLoaded", init);
