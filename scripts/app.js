@@ -108,6 +108,42 @@ function init() {
     });
   }
 
+  // removing the tetromino
+  function removeTetromino() {
+    shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          if (shape === shapes[3]) {
+            startingX = 4;
+          }
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(
+            (startingX + x) * cellSize,
+            (startingY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+          ctx.fillStyle = "black";
+          ctx.fillRect(
+            (startingX + x) * cellSize,
+            (startingY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+        }
+      });
+    });
+  }
+
+  // making the tetromino fall
+  function fall() {
+    let timer = setInterval(() => {
+      removeTetromino();
+      startingY += 1;
+      drawTetrimino();
+    }, fallTime);
+  }
+
   // function for starting the game
   function startGame() {
     // choosing a random tetromino shape
@@ -115,6 +151,8 @@ function init() {
     //draw tetromino
 
     drawTetrimino();
+
+    fall();
   }
 
   //event listener for the start button
