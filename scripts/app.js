@@ -11,16 +11,16 @@ function init() {
   let numOfRows = 20;
   let cellSize = 35;
   let cellNumbers = numOfRows * numOfColumns;
-  let time = 1000;
+  let fallTime = 1000;
   let grid = [];
+  let shape = [];
   let startingX = 3;
   let startingY = 0;
-  let shape = [];
 
   let shapes = [
     [
-      [0, 0, 0, 0],
       [1, 1, 1, 1],
+      [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ],
@@ -70,6 +70,7 @@ function init() {
         drawCell(j, i);
       }
     }
+    console.log(grid);
   }
   createGrid();
 
@@ -80,8 +81,32 @@ function init() {
     return shape;
   }
 
-  // drawing the tetromino shapes
-  function drawTetrimino() {}
+  // drawing the tetromino
+  function drawTetrimino() {
+    shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          if (shape === shapes[3]) {
+            startingX = 4;
+          }
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(
+            (startingX + x) * cellSize,
+            (startingY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+          ctx.fillStyle = "green";
+          ctx.fillRect(
+            (startingX + x) * cellSize,
+            (startingY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+        }
+      });
+    });
+  }
 
   // function for starting the game
   function startGame() {
