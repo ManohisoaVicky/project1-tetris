@@ -1,10 +1,10 @@
 function init() {
   let startBtn = document.querySelector("#start-button");
   let canvas = document.querySelector("#game-canvas");
-  let ctx = canvas.getContext("2d");
   let score = document.querySelector("#score");
   let lines = document.querySelector("#lines");
   let level = document.querySelector("#level");
+  let ctx = canvas.getContext("2d");
 
   // variables needed
   let numOfColumns = 10;
@@ -14,13 +14,10 @@ function init() {
   let fallTime = 1000;
   let grid = [];
   let shape = [];
-  let startingX = 3;
-  let startingY = 0;
-
-  // booleans
-  let tetroFalling = false;
-  let locked = false;
-  let fullLine = false;
+  let currentX = 3;
+  let currentY = 0;
+  let oCurrentX = 4;
+  let bottom = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   let shapes = [
     [
@@ -68,6 +65,8 @@ function init() {
         grid[grid.length - 1].push(0);
       }
     }
+    console.table(grid);
+    console.log(grid.length);
   }
   createGrid();
 
@@ -78,25 +77,64 @@ function init() {
     return shape;
   }
 
+  // functions for keyboard movements
+  function moveHori(num) {
+    if (shape === shapes[3]) {
+      oCurrentX += num;
+    }
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    currentX += num;
+    draw();
+  }
+
+  function moveDown(num) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    if (!collision) {
+      currentY += num;
+      draw();
+    }
+  }
+
+  function rotate() {
+    //to-do
+  }
+
+  // handles key events
+  function keyHandler(e) {
+    if (e.key === "ArrowLeft") {
+      if (currentX > 0) {
+        moveHori(-1);
+      }
+    } else if (e.key === "ArrowRight") {
+      if (currentX < grid[currentX].length - shape.length) {
+        moveHori(1);
+      }
+    } else if (e.key === "ArrowDown") {
+      moveDown(1);
+    } else if (e.key === "ArrowUp") {
+      console.log("up arrow");
+    }
+  }
+
   // drawing the tetromino
   function drawTetrimino() {
     shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value === 1) {
           if (shape === shapes[3]) {
-            startingX = 4;
+            currentX = oCurrentX;
           }
           ctx.strokeStyle = "white";
           ctx.strokeRect(
-            (startingX + x) * cellSize,
-            (startingY + y) * cellSize,
+            (currentX + x) * cellSize,
+            (currentY + y) * cellSize,
             cellSize,
             cellSize
           );
           ctx.fillStyle = "green";
           ctx.fillRect(
-            (startingX + x) * cellSize,
-            (startingY + y) * cellSize,
+            (currentX + x) * cellSize,
+            (currentY + y) * cellSize,
             cellSize,
             cellSize
           );
@@ -112,29 +150,38 @@ function init() {
   }
   draw();
 
-  // making the tetromino fall
+  // collision detection
+  function collisionDetection() {
+    if (currentY === 18) {
+      return true;
+    }
+    return false;
+  }
+
+  collisionDetection();
+
+  // fall motion
   function fall() {
-    let timer = setInterval(() => {
+    let motion = setInterval(() => {
+      console.log(currentY);
       draw();
-      startingY += 1;
+      currentY += 1;
+      if (collisionDetection()) {
+        clearInterval(motion);
+      }
     }, fallTime);
+    return;
   }
 
   // function for starting the game
   function startGame() {
-    // choosing a random tetromino shape
     randomShape();
-
-    // draw tetromino
-    draw();
-
-    // fall motion for the tetromino
     fall();
   }
 
   //event listeners
   startBtn.addEventListener("click", startGame);
-  document.addEventListener("keydown", tetMoves);
+  document.addEventListener("keydown", keyHandler);
 }
 
 window.addEventListener("DOMContentLoaded", init);
