@@ -21,10 +21,10 @@ function init() {
 
   let shapes = [
     [
-      [1, 1, 1, 1],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
     ],
     [
       [1, 0, 0],
@@ -152,7 +152,13 @@ function init() {
 
   // collision detection
   function collisionDetection() {
-    if (currentY === 18) {
+    if (
+      (currentY + shape.length) * cellSize >
+      ctx.canvas.height
+      // ||
+      // currentX * cellSize - cellSize < 0 ||
+      // currentX * cellSize >= ctx.canvas.width
+    ) {
       return true;
     }
     return false;
