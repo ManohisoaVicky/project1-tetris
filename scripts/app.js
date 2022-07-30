@@ -76,7 +76,7 @@ function init() {
     return shape;
   }
 
-  // getting height of the shape
+  // getting shape height
   function getShapeHeight() {
     let len = shape.length;
 
@@ -95,7 +95,6 @@ function init() {
 
     return len;
   }
-
   function isTheSameArray(array1, array2) {
     if (array1.length === array2.length) {
       return array1.every((element, index) => {
@@ -220,14 +219,37 @@ function init() {
   // fall motion
   function fall() {
     let motion = setInterval(() => {
+      if (collisionDetection()) {
+        clearInterval(motion);
+        updateGrid(grid, shape);
+        resetPositions();
+        startGame();
+        return;
+      }
       if (currentY >= numOfRows - getShapeHeight()) return;
       draw();
       currentY += 1;
-      if (collisionDetection()) {
-        clearInterval(motion);
-      }
     }, fallTime);
     return;
+  }
+
+  // resetting the positions
+  function resetPositions() {
+    currentX = 3;
+    currentY = 0;
+    oCurrentX = 4;
+  }
+
+  //update grid on collision
+  function updateGrid(grid, shape) {
+    shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          grid[y + currentY][x + currentX] = value;
+        }
+      });
+    });
+    console.log(grid);
   }
 
   // function for starting the game
