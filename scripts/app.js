@@ -17,7 +17,6 @@ function init() {
   let currentX = 3;
   let currentY = 0;
   let oCurrentX = 4;
-  let bottom = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   let shapes = [
     [
@@ -77,6 +76,7 @@ function init() {
     return shape;
   }
 
+  // getting height of the shape
   function getShapeHeight() {
     let len = shape.length;
 
@@ -119,18 +119,39 @@ function init() {
   }
   function moveDown(num) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // if condition is to be rewritten
     if (currentY < numOfRows - getShapeHeight()) {
       currentY += num;
       draw();
     }
   }
-
   function rotate() {
-    //to-do
+    const tempShape = Array.from(shape);
+    if (shape.length === 3) {
+      shape[0] = [tempShape[2][0], tempShape[1][0], tempShape[0][0]];
+      shape[1] = [tempShape[2][1], tempShape[1][1], tempShape[0][1]];
+      shape[2] = [tempShape[2][2], tempShape[1][2], tempShape[0][2]];
+    } else if (shape.length === 4) {
+      if (shape[3][1] === 0) {
+        shape = [
+          [0, 1, 0, 0],
+          [0, 1, 0, 0],
+          [0, 1, 0, 0],
+          [0, 1, 0, 0],
+        ];
+      } else {
+        shape = [
+          [1, 1, 1, 1],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+        ];
+      }
+    }
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    draw();
   }
 
-  // handles key events
+  // handles key event listeners
   function keyHandler(e) {
     if (e.key === "ArrowLeft") {
       if (currentX > 0 && !collisionDetection()) {
@@ -190,24 +211,16 @@ function init() {
 
   // collision detection
   function collisionDetection() {
-    if (
-      (currentY + shape.length) * cellSize >
-      ctx.canvas.height
-      // ||
-      // currentX * cellSize - cellSize < 0 ||
-      // currentX * cellSize >= ctx.canvas.width
-    ) {
+    if (currentY >= numOfRows - getShapeHeight()) {
       return true;
     }
     return false;
   }
 
-  collisionDetection();
-
   // fall motion
   function fall() {
     let motion = setInterval(() => {
-      console.log(currentY);
+      if (currentY >= numOfRows - getShapeHeight()) return;
       draw();
       currentY += 1;
       if (collisionDetection()) {
