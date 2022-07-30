@@ -77,6 +77,37 @@ function init() {
     return shape;
   }
 
+  function getShapeHeight() {
+    let len = shape.length;
+
+    arr4 = [0, 0, 0, 0];
+    arr3 = [0, 0, 0];
+
+    if (len === 4) {
+      if (isTheSameArray(shape[len - 1], arr4)) {
+        return 1;
+      }
+    } else if (len === 3) {
+      if (isTheSameArray(shape[len - 1], arr3)) {
+        return 2;
+      }
+    }
+
+    return len;
+  }
+
+  function isTheSameArray(array1, array2) {
+    if (array1.length === array2.length) {
+      return array1.every((element, index) => {
+        if (element === array2[index]) {
+          return true;
+        }
+
+        return false;
+      });
+    }
+  }
+
   // functions for keyboard movements
   function moveHori(num) {
     if (shape === shapes[3]) {
@@ -86,10 +117,10 @@ function init() {
     currentX += num;
     draw();
   }
-
   function moveDown(num) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    if (!collision) {
+    // if condition is to be rewritten
+    if (currentY < numOfRows - getShapeHeight()) {
       currentY += num;
       draw();
     }
@@ -102,17 +133,24 @@ function init() {
   // handles key events
   function keyHandler(e) {
     if (e.key === "ArrowLeft") {
-      if (currentX > 0) {
+      if (currentX > 0 && !collisionDetection()) {
         moveHori(-1);
       }
     } else if (e.key === "ArrowRight") {
-      if (currentX < grid[currentX].length - shape.length) {
+      if (
+        currentX < grid[currentX].length - shape.length &&
+        !collisionDetection()
+      ) {
         moveHori(1);
       }
     } else if (e.key === "ArrowDown") {
-      moveDown(1);
+      if (!collisionDetection()) {
+        moveDown(1);
+      }
     } else if (e.key === "ArrowUp") {
-      console.log("up arrow");
+      if (!collisionDetection()) {
+        rotate();
+      }
     }
   }
 
