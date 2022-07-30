@@ -76,6 +76,41 @@ function init() {
     return shape;
   }
 
+  // drawing the tetromino
+  function drawTetrimino() {
+    shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          if (shape === shapes[3]) {
+            currentX = oCurrentX;
+          }
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(
+            (currentX + x) * cellSize,
+            (currentY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+          ctx.fillStyle = "green";
+          ctx.fillRect(
+            (currentX + x) * cellSize,
+            (currentY + y) * cellSize,
+            cellSize,
+            cellSize
+          );
+        }
+      });
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    drawUpdatedGrid();
+    drawTetrimino();
+    requestAnimationFrame(draw);
+  }
+  draw();
+
   // getting shape height
   function getShapeHeight() {
     let len = shape.length;
@@ -174,40 +209,6 @@ function init() {
     }
   }
 
-  // drawing the tetromino
-  function drawTetrimino() {
-    shape.forEach((row, y) => {
-      row.forEach((value, x) => {
-        if (value === 1) {
-          if (shape === shapes[3]) {
-            currentX = oCurrentX;
-          }
-          ctx.strokeStyle = "white";
-          ctx.strokeRect(
-            (currentX + x) * cellSize,
-            (currentY + y) * cellSize,
-            cellSize,
-            cellSize
-          );
-          ctx.fillStyle = "green";
-          ctx.fillRect(
-            (currentX + x) * cellSize,
-            (currentY + y) * cellSize,
-            cellSize,
-            cellSize
-          );
-        }
-      });
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    drawTetrimino();
-    requestAnimationFrame(draw);
-  }
-  draw();
-
   // collision detection
   function collisionDetection() {
     if (currentY >= numOfRows - getShapeHeight()) {
@@ -222,6 +223,7 @@ function init() {
       if (collisionDetection()) {
         clearInterval(motion);
         updateGrid(grid, shape);
+        // drawUpdatedGrid();
         resetPositions();
         startGame();
         return;
@@ -250,6 +252,23 @@ function init() {
       });
     });
     console.log(grid);
+  }
+
+  // draw updated grid
+  function drawUpdatedGrid() {
+    grid.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (grid[y][x] === 1) {
+          if (shape === shapes[3]) {
+            currentX = oCurrentX;
+          }
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+          ctx.fillStyle = "green";
+          ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+      });
+    });
   }
 
   // function for starting the game
