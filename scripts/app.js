@@ -8,11 +8,11 @@ function init() {
   let ctx = canvas.getContext("2d");
 
   // variables needed
+  let width = ctx.canvas.width;
   let numOfColumns = 10;
   let numOfRows = 20;
-  let cellSize = 35;
-  let cellNumbers = numOfRows * numOfColumns;
-  let fallTime = 1000;
+  let cellSize = width / 10;
+  let fallTime = 800;
   let grid = [];
   let shape = [];
   let currentX = 3;
@@ -70,6 +70,7 @@ function init() {
   }
   createGrid();
 
+  // getting grid
   function getNewGrid() {
     let gridRes = [];
     for (let i = 0; i < numOfRows; i++) {
@@ -464,6 +465,9 @@ function init() {
         x++;
         score += 100;
         lines += 1;
+        if (lines % 7 === 0) {
+          fallTime -= 100;
+        }
         playerScore.textContent = score;
         playerLines.textContent = lines;
       }
