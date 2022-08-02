@@ -1,9 +1,10 @@
 function init() {
   let startBtn = document.querySelector("#start-button");
   let canvas = document.querySelector("#game-canvas");
-  let score = document.querySelector("#score");
-  let lines = document.querySelector("#lines");
-  let level = document.querySelector("#level");
+  let playerScore = document.querySelector("#score");
+  let playerLines = document.querySelector("#line");
+  let score = 0;
+  let lines = 0;
   let ctx = canvas.getContext("2d");
 
   // variables needed
@@ -68,6 +69,17 @@ function init() {
     console.log(grid.length);
   }
   createGrid();
+
+  function getNewGrid() {
+    let gridRes = [];
+    for (let i = 0; i < numOfRows; i++) {
+      gridRes[i] = [];
+      for (let j = 0; j < numOfColumns; j++) {
+        gridRes[gridRes.length - 1].push(0);
+      }
+    }
+    return gridRes;
+  }
 
   // randomly choosing a tetromino shape
   function randomShape() {
@@ -142,13 +154,134 @@ function init() {
     }
   }
 
+  //checking if left side is void
+  function isLeftVoid() {
+    if (shape.length === 3) {
+      if (shape[0][0] === 0 && shape[1][0] === 0 && shape[2][0] === 0)
+        return true;
+    } else if (shape.length === 4) {
+      if (
+        shape[0][0] === 0 &&
+        shape[1][0] === 0 &&
+        shape[2][0] === 0 &&
+        shape[3][0] === 0
+      )
+        return true;
+    }
+
+    return false;
+  }
+
+  // checking if right side is void
+  function isRightVoid() {
+    if (shape.length === 3) {
+      if (shape[0][2] === 0 && shape[1][2] === 0 && shape[2][2] === 0)
+        return true;
+    } else if (shape.length === 4) {
+      if (
+        shape[0][3] === 0 &&
+        shape[1][3] === 0 &&
+        shape[2][3] === 0 &&
+        shape[3][3] === 0
+      )
+        return true;
+    }
+
+    return false;
+  }
+
   // functions for keyboard movements
   function moveHori(num) {
+    if (sideCollision()) {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      draw();
+      return;
+    }
     if (shape === shapes[3]) {
       oCurrentX += num;
     }
+    if (num === -1 && isLeftVoid()) {
+      const tempShape = Array.from(shape);
+      if (shape.length === 3) {
+        shape[0] = [tempShape[0][1], tempShape[0][2], tempShape[0][0]];
+        shape[1] = [tempShape[1][1], tempShape[1][2], tempShape[1][0]];
+        shape[2] = [tempShape[2][1], tempShape[2][2], tempShape[2][0]];
+      } else if (shape.length === 4) {
+        shape[0] = [
+          tempShape[0][1],
+          tempShape[0][2],
+          tempShape[0][3],
+          tempShape[0][0],
+        ];
+        shape[1] = [
+          tempShape[1][1],
+          tempShape[1][2],
+          tempShape[1][3],
+          tempShape[1][0],
+        ];
+        shape[2] = [
+          tempShape[2][1],
+          tempShape[2][2],
+          tempShape[2][3],
+          tempShape[2][0],
+        ];
+        shape[3] = [
+          tempShape[3][1],
+          tempShape[3][2],
+          tempShape[3][3],
+          tempShape[3][0],
+        ];
+      }
+
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      draw();
+      return;
+    } else if (num === 1 && isRightVoid()) {
+      const tempShape = Array.from(shape);
+      if (shape.length === 3) {
+        shape[0] = [tempShape[0][2], tempShape[0][0], tempShape[0][1]];
+        shape[1] = [tempShape[1][2], tempShape[1][0], tempShape[1][1]];
+        shape[2] = [tempShape[2][2], tempShape[2][0], tempShape[2][1]];
+      } else if (shape.length === 4) {
+        shape[0] = [
+          tempShape[0][3],
+          tempShape[0][0],
+          tempShape[0][1],
+          tempShape[0][2],
+        ];
+        shape[1] = [
+          tempShape[1][3],
+          tempShape[1][0],
+          tempShape[1][1],
+          tempShape[1][2],
+        ];
+        shape[2] = [
+          tempShape[2][3],
+          tempShape[2][0],
+          tempShape[2][1],
+          tempShape[2][2],
+        ];
+        shape[3] = [
+          tempShape[3][3],
+          tempShape[3][0],
+          tempShape[3][1],
+          tempShape[3][2],
+        ];
+      }
+
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      draw();
+      return;
+    } else {
+      if (num === 1) {
+        if (currentX >= 0 && currentX < numOfColumns - shape.length)
+          currentX += num;
+      } else {
+        if (currentX > 0 && currentX <= numOfColumns) currentX += num;
+      }
+    }
+
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    currentX += num;
     draw();
   }
   function moveDown(num) {
@@ -213,7 +346,40 @@ function init() {
   function collisionDetection() {
     if (currentY >= numOfRows - getShapeHeight()) {
       return true;
+    } else {
+      if (shapeCollidesGridBottom(shape)) return true;
+      return false;
     }
+  }
+
+  //checking if bottom collides
+  function shapeCollidesGridBottom(shape) {
+    let grid2 = getGrid(shape);
+    for (let i = 0; i < grid.length - 1; i++) {
+      for (let j = 0; j < grid.length; j++) {
+        if (grid[i + 1][j] == 1 && grid[i + 1][j] == grid2[i][j]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function sideCollision() {
+    let tempY = currentY;
+    for (let s = 0; s < shape.length; s++) {
+      for (let r = 0; r < shape[s].length; r++) {
+        let x = currentX + r;
+        if (
+          (grid[tempY][x - 1] === 1 && shape[s][r]) === 1 ||
+          (grid[tempY][x + 1] === 1 && shape[s][r] === 1)
+        ) {
+          return true;
+        }
+      }
+      tempY += 1;
+    }
+
     return false;
   }
 
@@ -223,7 +389,12 @@ function init() {
       if (collisionDetection()) {
         clearInterval(motion);
         updateGrid(grid, shape);
-        // drawUpdatedGrid();
+        if (gameOver()) {
+          if (window.confirm("Game Over! Would you like to play again?")) {
+            location.reload();
+          }
+          return;
+        }
         resetPositions();
         startGame();
         return;
@@ -251,6 +422,7 @@ function init() {
         }
       });
     });
+    removeLine();
     console.log(grid);
   }
 
@@ -271,9 +443,55 @@ function init() {
     });
   }
 
+  function getGrid(shape) {
+    let gridRes = getNewGrid();
+    shape.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 1) {
+          gridRes[y + currentY][x + currentX] = value;
+        }
+      });
+    });
+    return gridRes;
+  }
+
+  // function to remove and add lines
+  function removeLine() {
+    for (let x = numOfRows - 1; x >= 0; x--) {
+      if (full(grid[x])) {
+        grid.splice(x, 1);
+        grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        x++;
+        score += 100;
+        lines += 1;
+        playerScore.textContent = score;
+        playerLines.textContent = lines;
+      }
+    }
+  }
+
+  function full(row) {
+    if (isTheSameArray(row, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1])) {
+      return true;
+    }
+    return false;
+  }
+
+  // function for game over
+  function gameOver() {
+    let top = grid[0];
+    for (let i = 0; i < top.length; i++) {
+      if (top[i] === 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // function for starting the game
   function startGame() {
     randomShape();
+    lastMove = true;
     fall();
   }
 
