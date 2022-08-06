@@ -11,6 +11,8 @@ Tech stack:
 * JavaScript
 
 ## <u>Deployment Link</u>
+You can follow this link to try my Tetris project:
+[Tetris](https://manohisoavicky.github.io/project1-tetris/)
 
 
 ## <u>Time Frame and Working Team</u>
