@@ -1,18 +1,18 @@
 function init() {
   let startBtn = document.querySelector("#start-button");
   let canvas = document.querySelector("#game-canvas");
+  let ctx = canvas.getContext("2d");
   let playerScore = document.querySelector("#score");
   let playerLines = document.querySelector("#line");
   let score = 0;
   let lines = 0;
-  let ctx = canvas.getContext("2d");
 
   // variables needed
   let width = ctx.canvas.width;
   let numOfColumns = 10;
   let numOfRows = 20;
   let cellSize = width / 10;
-  let fallTime = 800;
+  let fallTime = 1000;
   let grid = [];
   let shape = [];
   let currentX = 3;
@@ -65,8 +65,6 @@ function init() {
         grid[grid.length - 1].push(0);
       }
     }
-    console.table(grid);
-    console.log(grid.length);
   }
   createGrid();
 
@@ -143,13 +141,14 @@ function init() {
 
     return len;
   }
+
+  // checks whether arrays have same element
   function isTheSameArray(array1, array2) {
     if (array1.length === array2.length) {
       return array1.every((element, index) => {
         if (element === array2[index]) {
           return true;
         }
-
         return false;
       });
     }
@@ -424,7 +423,6 @@ function init() {
       });
     });
     removeLine();
-    console.log(grid);
   }
 
   // draw updated grid
@@ -465,9 +463,6 @@ function init() {
         x++;
         score += 100;
         lines += 1;
-        if (lines % 7 === 0) {
-          fallTime -= 100;
-        }
         playerScore.textContent = score;
         playerLines.textContent = lines;
       }
@@ -495,8 +490,8 @@ function init() {
   // function for starting the game
   function startGame() {
     randomShape();
-    lastMove = true;
     fall();
+    startBtn.style.display = "none";
   }
 
   //event listeners
