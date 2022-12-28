@@ -4,8 +4,6 @@ function init() {
   let ctx = canvas.getContext("2d");
   let playerScore = document.querySelector("#score");
   let playerLines = document.querySelector("#line");
-  let score = 0;
-  let lines = 0;
 
   // variables needed
   let width = ctx.canvas.width;
@@ -18,6 +16,8 @@ function init() {
   let currentX = 3;
   let currentY = 0;
   let oCurrentX = 4;
+  let score = 0;
+  let lines = 0;
 
   let shapes = [
     [
@@ -68,7 +68,7 @@ function init() {
   }
   createGrid();
 
-  // getting grid
+  // getting a new grid
   function getNewGrid() {
     let gridRes = [];
     for (let i = 0; i < numOfRows; i++) {
@@ -138,7 +138,6 @@ function init() {
         return 2;
       }
     }
-
     return len;
   }
 
@@ -190,7 +189,7 @@ function init() {
     return false;
   }
 
-  // functions for keyboard movements
+  // functions to move horizontally
   function moveHori(num) {
     if (sideCollision()) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -284,6 +283,8 @@ function init() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     draw();
   }
+
+  // function to move down
   function moveDown(num) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (currentY < numOfRows - getShapeHeight()) {
@@ -291,6 +292,8 @@ function init() {
       draw();
     }
   }
+
+  // function to rotate tetromino
   function rotate() {
     const tempShape = Array.from(shape);
     if (shape.length === 3) {
@@ -342,12 +345,14 @@ function init() {
     }
   }
 
-  // collision detection
+  // collision detection for bottom
   function collisionDetection() {
     if (currentY >= numOfRows - getShapeHeight()) {
       return true;
     } else {
-      if (shapeCollidesGridBottom(shape)) return true;
+      if (shapeCollidesGridBottom(shape)) {
+        return true;
+      }
       return false;
     }
   }
@@ -365,6 +370,7 @@ function init() {
     return false;
   }
 
+  // checking side collisions with another tetromino
   function sideCollision() {
     let tempY = currentY;
     for (let s = 0; s < shape.length; s++) {
@@ -442,6 +448,7 @@ function init() {
     });
   }
 
+  // getting the updating the new grid
   function getGrid(shape) {
     let gridRes = getNewGrid();
     shape.forEach((row, y) => {
@@ -469,6 +476,7 @@ function init() {
     }
   }
 
+  // checking if the row is full
   function full(row) {
     if (isTheSameArray(row, [1, 1, 1, 1, 1, 1, 1, 1, 1, 1])) {
       return true;
