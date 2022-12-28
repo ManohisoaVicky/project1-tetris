@@ -2,21 +2,17 @@
 # Project 1: Tetris
 
 ## Project Description
-----
 Tetris is a falling block puzzle game commonly known around the world. The main goal of the game is to try to prevent the blocks from stacking up to the top of the game board for as long as possible. As my project, I decided to recreate this classic game. 
 
 ## Deployment Link
-----
 You can follow this link to try my Tetris project:
 [Tetris](https://manohisoavicky.github.io/project1-tetris/)
 
 
 ## Time Frame and Working Team
-----
 This project, which was to be done individually, had a time frame of two weeks. 
 
 ## Technologies Used
-----
 The technologies used for this projects were:
 * HTML
 * CSS
@@ -25,7 +21,6 @@ The technologies used for this projects were:
 * Visual Studio Code
 
 ## Brief
-----
 * Render a game in the browser
 * Design logic for winning
 * Visual display of the winner
@@ -36,7 +31,6 @@ The technologies used for this projects were:
 * Semantic markup for HTML and CSS
 
 ## Planning
-----
 ### Trello
 The first thing I did before writing code was plan the things I had to do. To do this, I decided to use Trello. In the Trello board below, you can see some of the questions I asked myself at the beginning of my project. As I progressed, I answered those questions one by one. Hence, the reason why they are all in the Done list.
 
@@ -50,7 +44,6 @@ Sketching was also very helpful. As my project was a game, seeing a visual repre
 <img src="images/tetris-shapes.jpeg" height="700">
 
 ## Code Process
-----
 Although Tetris is a straightforward game to play, building it is a whole different process. It is complicated and requires a lot of planning. 
 
 
@@ -216,28 +209,24 @@ Since no game would be fun if it does not end, I made sure to stop my game once 
 
 
 ## Challenges
-----
 My biggest challenge in this project was detecting the collisions. There were many different scenarios that would create a collision. Additionally, I had to be able to detect those collisions even when the tetromino had rotated. 
 
 Taking all those scenarios into consideration, I decided to create various functions that would each solve an issue of their own instead of creating just one collision detection function. Once I had decided that I would break the collision function into other small collision function, it was easy for me to focus on just one problem at a time. 
 
 
 ## Wins
-----
 One of the wins in this project was the draw function. I initially created another function to remove the drawn tetromino shape. However, I ended up with a long function. I decided to scheme through the internet to try to find a solution, and I found requestAnimationFrame(). I found that very helpful and insightful. I managed to get rid of my remove tetromino function, and write a better function instead.
 
 Having the tetrominos rotate was also a win for me. It was quite challenging to make sure the function would work all the shapes.
 
 
 ## Key Learnings
-----
 With this project, I managed to discover a lot, such as how to use Chrome's developer tools sources panel.
 
 My understanding of JavaScript definitely increased a lot. I was also able to improve my problem solving and debugging skills.
 
 
 ## Bugs
-----
 My Tetris game has a delay. Sometimes, there would be a delay in the fall of the next tetromino even though the other one has already been locked in place. The same goes for when a line is full. There's a delay for removing the lines. I believe this bug has something to do with the fall motion, more precisely in the setInterval part. 
 
 Additionally, in most Tetris games, the tetromino should be able to move one last time horizontally once it has collided with something at the bottom. However, I was not able to recreate that last movement. 
@@ -248,7 +237,6 @@ Furthermore, if you play the game for a prolonged period of time, the tetromino 
 
 
 ## Future Improvements
-----
 * Pause button
 * Fixing the bugs
 * Allowing one last move when bottom collision occurs
